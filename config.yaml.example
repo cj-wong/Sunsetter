@@ -1,0 +1,28 @@
+# Fill in the fields, copy the file, and rename it config.yaml
+# ---
+# Wolfram|Alpha APPID
+appid: ''
+# Absolute paths for scripts root
+scripts:
+  root: ''
+  switch_on: ''
+  switch_off: ''
+sunset:
+  offset:
+    # Relative values:
+    #   Positive values are interpreted as *past* sunset, while
+    #   negative values are interpreted as *before*.
+    hours: 0
+    minutes: 0
+# When to clear the table of existing entries.
+# Use the 24-hour format for hour.
+clean:
+  hour: 0
+  minute: 0
+# Optional.
+# Set an absolute local time for shutdown.
+# Use the 24-hour format for hour.
+shutdown:
+  enabled: false
+  hour: 0
+  minute: 0
