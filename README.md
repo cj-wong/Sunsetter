@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project aims to automate sunset checking; scripts are intended to be used in conjunction with the check. In particular, you can 
+This project aims to automate sunset checking; scripts are intended to be used in conjunction with the check. In particular, you can add scripts to fire around sunset and a fixed point after. For example, you could create external scripts that control an IOT device (smart plug, lightbulb): turn on near sunset and turn off after.
 
 ## Usage
 
