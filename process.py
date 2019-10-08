@@ -119,17 +119,15 @@ def cron_it(crontab: CronTab, script: str, hour: int, minute: int) -> None:
 
     Args:
         crontab (CronTab): the crontab itself
-        script (str): the script to call in this job
+        script (str): the script to call in this job; the key of SCRIPTS
         hour (int): the hour the job will start
         minute (int): the minute the job will start
 
     """
     job = crontab.new(
-        command=f"{SCRIPTS['root']}/{script}",
-        comment=PROJECT,
+        command=f"{SCRIPTS['root']}/{SCRIPTS[script]}",
+        comment=f"{PROJECT}-{script}",
         )
-    if script == SCRIPTS['switch_off']:
-        job.comment = 'Sunsetter OFF'
     job.hour.on(hour)
     job.minute.on(minute)
     crontab.write()
@@ -165,7 +163,7 @@ if __name__ == '__main__':
 
     cron_it(
         crontab,
-        SCRIPTS['switch_on'],
+        'switch_on',
         hour,
         minute
         )
@@ -174,7 +172,7 @@ if __name__ == '__main__':
     # comment out this block after having run at least once.
     cron_it(
         crontab,
-        SCRIPTS['switch_off'],
+        'switch_off',
         SHUTDOWN['hour'],
         SHUTDOWN['minute']
         )
