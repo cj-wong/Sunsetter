@@ -7,6 +7,12 @@ scripts:
   root: ''
   switch_on: ''
   switch_off: ''
+# Failsafe will be used if Internet services (including Wolfram|Alpha APIs)
+# cannot be reached. Keep in mind the time represented here is *before*
+# offset is applied, as if that was the actual sunset time.
+failsafe:
+  hour: 0
+  minute: 0
 sunset:
   # Whether for auto-remove to delete `switch_on` cron jobs
   remove: true

@@ -32,6 +32,9 @@ This code is designed around the following:
         - `root`: where your scripts live
         - `switch_on`: called around sunset, with your `offset`s considered
         - `switch_off`: called at `shutdown` time
+    - `failsafe`: failsafe in case the [*Wolfram|Alpha*][WA] APIs can't be reached; treated as sunset
+        - `hour`
+        - `minute`
     - `sunset`
         - `remove`: *(default: `true`)* whether auto-remove should remove `switch_on` jobs
         - `offset`: how far away in time relative to sunset; can be negative or positive

@@ -18,22 +18,34 @@ def check_sunset() -> Tuple[int, int]:
         tuple(int, int): (hour, minute) of the sunset
 
     """
-    page = requests.get(
-        f'{URL}?input=sunset&appid={config.APPID}&assumption=CalendarEventName'
-        )
-    soup = BeautifulSoup(page.text, 'lxml')
-    for pod in soup.find_all('pod'):
-        if pod['id'] == 'Result':
-            text = pod.plaintext.text
-            time = text.split('\n')[0]
-            h_m, period = time.split()[:2]
-            hour, minute = [int(d) for d in h_m.split(':')]
-            if period.startswith('p'):
-                hour += 12
-            message = f'Sunset will be at {hour:02}:{minute:02}'
-            config.LOGGER.info(message)
-            print(message)
-            return (hour, minute)
+    try:
+        page = requests.get(
+            f'{URL}?input=sunset&appid={config.APPID}'
+            '&assumption=CalendarEventName'
+            )
+        soup = BeautifulSoup(page.text, 'lxml')
+        for pod in soup.find_all('pod'):
+            if pod['id'] == 'Result':
+                text = pod.plaintext.text
+                time = text.split('\n')[0]
+                h_m, period = time.split()[:2]
+                hour, minute = [int(d) for d in h_m.split(':')]
+                if period.startswith('p'):
+                    hour += 12
+                message = f'Sunset will be at {hour:02}:{minute:02}'
+                config.LOGGER.info(message)
+                print(message)
+                return (hour, minute)
+    except AttributeError, KeyError, TypeError, ValueError as e:
+        message = 'Encountered an error. Using failsafe...'
+        print(message)
+        config.LOGGER.warn(message)
+        config.LOGGER.warn(e)
+        failsafe = config['failsafe']
+        print(
+            f"Sunset emulated at {failsafe['hour']:02}:{failsafe['minute']:02}"
+            )
+        return (failsafe['hour'], failsafe['minute'])
 
 
 def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
