@@ -33,15 +33,27 @@ This code is designed around the following:
         - `switch_on`: called around sunset, with your `offset`s considered
         - `switch_off`: called at `shutdown` time
     - `sunset`
+        - `remove`: *(default: `true`)* whether auto-remove should remove `switch_on` jobs
         - `offset`: how far away in time relative to sunset; can be negative or positive
             - `hours`
             - `minutes`
-    - `clean`: currently unused
+    - `remove`: *(required for `remove`)*
+        - `hour`: the hour when to initiate removal
+        - `minute`: the minute when to initiate removal
+    - `shutdown`: *(optional but recommended)* when to call `switch_off`
+        - `enabled`: *(default: `false`)* whether to use `switch_off`
+        - `remove`: *(default: `false`)* whether auto-remove should remove `switch_off` jobs
         - `hour`
         - `minute`
-    - `shutdown`: when to call `switch_off`
-        - `hour`
-        - `minute`
+    - `env`: *(required for `remove`)* where the environment is for the project
+    - `root`: *(required for `remove`)* where the project root is
+4. *(Optional)* Run [`crontabber.py`](crontabber.py) to write a cron job with both the [`process.py`](process.py) and the [`remove.py`](remove.py) scripts. Requires all fields to be filled out.
+
+⚠ If `shutdown`, `shutdown[hour]`, `shutdown[minute]`, or `scripts[switch_off]` are missing, the program will warn you but still run everything except call the shutdown (`switch_off`) scripts.
+
+⚠ If `env`, `root`, `remove`, `remove[hour]`, or `remove[minute]` are missing, the program will be unable to install the optional auto-remove cron job.
+
+⚠ Any other missing parameters will cause the program to fail.
 
 ## Project Files
 
