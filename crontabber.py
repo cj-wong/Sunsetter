@@ -51,16 +51,21 @@ class CronTabber:
         self.crontab.write()
         return jobs
 
-    def register_auto_remove(self) -> None:
+    def register_auto(self, script: str, conf: str) -> None:
         """Registers an auto-remove script. This should only be
         called once, unless the cron job was deleted.
+
+        Args:
+            script (str): the script to register for auto-runs
+            conf (str): the configuration section to use;
+                must have 'hour' and 'minute' keys
 
         """
         try:
             assert (CONF['env'] and CONF['root']), 'Configuration not found'
-            script = f"{CONF['root']/remove.py}"
+            script = f"{CONF['root']}/{script}"
             assert Path(script).exists(), 'Script not found'
-            CONF['remove']['hour'] and CONF['remove']['minute']
+            CONF[conf]['hour'] and CONF[conf]['minute']
         except (AssertionError, KeyError, TypeError, ValueError) as e:
             print('A fatal error has occurred. More info:')
             print(e)
@@ -69,13 +74,20 @@ class CronTabber:
 
         job = self.crontab.new(
             command=f"{CONF['env']} {script}",
-            comment=f"{PROJECT}-auto-remove"
+            comment=f"{PROJECT}-auto-{conf}"
             )
-        job.hour.on(CONF['remove']['hour'])
-        job.minute.on(CONF['remove']['minute'])
+        job.hour.on(CONF[conf]['hour'])
+        job.minute.on(CONF[conf]['minute'])
         self.crontab.write()
 
 
 if __name__ == '__main__':
+    print('Only run this once, or when/if these cron jobs are removed.')
     crontab = CronTabber()
-    crontab.register_auto_remove()
+    autos = [
+        ('remove.py', 'remove'),
+        ('process.py', 'run')
+        ]
+    for script, conf in autos:
+        print('Registering', script)
+        crontab.register_auto(script, conf)

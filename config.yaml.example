@@ -16,6 +16,10 @@ sunset:
     #   negative values are interpreted as *before*.
     hours: 0
     minutes: 0
+# When to run the main script.
+run:
+  hour: 0
+  minute: 0
 # When to clear the table of existing entries.
 # Use the 24-hour format for hour.
 remove:
