@@ -28,7 +28,7 @@ This code is designed around the following:
 2. Request an **AppID**.
     - Store this into [`config.yaml`](config.yaml.example) in `appid`.
 3. [Fill](#configuration) in the other fields in the configuration file as desired.
-4. *(Optional)* Run [`crontabber.py`](crontabber.py) to write a cron job with both the [`process.py`](process.py) and the [`remove.py`](remove.py) scripts. Requires all fields to be filled out.
+4. *(Optional)* Run [`crontabber.py`](crontabber.py) to register cron jobs with both the [`process.py`](process.py) and the [`remove.py`](remove.py) scripts. Requires all fields to be filled out.
 
 ## [Configuration](config.yaml.example)
 
@@ -60,15 +60,15 @@ This code is designed around the following:
 
 ⚠ Each section's `hour` and `minute`, if present, represent when that section will run, at `hour:minute` local time. Compare that with `hours` and `minutes` in section `sunset[offset]`; these values instead are relative values from sunset.
 
-⚠ If `shutdown`, `shutdown[hour]`, `shutdown[minute]`, or `scripts[switch_off]` are missing, the program will warn you but still run everything except call the shutdown (`switch_off`) scripts.
+⚠️ If `shutdown`, `shutdown[hour]`, `shutdown[minute]`, or `scripts[switch_off]` are missing, the program will warn you but still run everything except call the shutdown (`switch_off`) scripts.
 
-⚠ If `env` and `root` are missing, both the optional `run` and `remove` scripts cannot be registered as cron jobs.
+⚠️ If `env` and `root` are missing, both the optional `run` and `remove` scripts cannot be registered as cron jobs.
 
-⚠ If `run`, `run[hour]`, or `run[minute]` are missing, the optional `run` script cannot be registered as a cron job.
+⚠️ If `run`, `run[hour]`, or `run[minute]` are missing, the optional `run` script cannot be registered as a cron job.
 
 ⚠️ If `remove`, `remove[hour]`, or `remove[minute]` are missing, the optional `remove` script cannot be registered as a cron job.
 
-⚠ Any other missing parameters will cause the program to fail.
+⚠️ Any other missing parameters will cause the program to fail.
 
 ## Project Files
 
