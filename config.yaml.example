@@ -16,7 +16,7 @@ sunset:
     minutes: 0
 # When to clear the table of existing entries.
 # Use the 24-hour format for hour.
-clean:
+remove:
   hour: 0
   minute: 0
 # Optional.
@@ -26,3 +26,7 @@ shutdown:
   enabled: false
   hour: 0
   minute: 0
+# The following configurations are meant for automated job deletion.
+# Absolute paths for both env and root
+env: ''
+root: ''
