@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Dict
 
-import yaml
 from crontab import CronTab
 
 from config import CONF, LOGGER
@@ -48,7 +47,9 @@ class CronTabber:
         # Will intentionally cause KeyError, etc. if invalid
         CONF['scripts'][script]
 
-        return self.crontab.remove_all(comment=f"{PROJECT}-{script}")
+        jobs = self.crontab.remove_all(comment=f"{PROJECT}-{script}")
+        self.crontab.write()
+        return jobs
 
     def register_auto_remove(self) -> None:
         """Registers an auto-remove script. This should only be

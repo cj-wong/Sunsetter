@@ -8,6 +8,8 @@ scripts:
   switch_on: ''
   switch_off: ''
 sunset:
+  # Whether for auto-remove to delete `switch_on` cron jobs
+  remove: true
   offset:
     # Relative values:
     #   Positive values are interpreted as *past* sunset, while
@@ -24,6 +26,8 @@ remove:
 # Use the 24-hour format for hour.
 shutdown:
   enabled: false
+  # Whether for auto-remove to delete `switch_off` cron jobs
+  remove: false
   hour: 0
   minute: 0
 # The following configurations are meant for automated job deletion.
