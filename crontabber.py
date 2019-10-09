@@ -74,3 +74,8 @@ class CronTabber:
         job.hour.on(CONF['remove']['hour'])
         job.minute.on(CONF['remove']['minute'])
         self.crontab.write()
+
+
+if __name__ == '__main__':
+    crontab = CronTabber()
+    crontab.register_auto_remove()
