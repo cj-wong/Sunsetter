@@ -73,7 +73,7 @@ class CronTabber:
             raise 
 
         job = self.crontab.new(
-            command=f"{CONF['env']} {script}",
+            command=f"{CONF['env']}/bin/python {script}",
             comment=f"{PROJECT}-auto-{conf}"
             )
         job.hour.on(CONF[conf]['hour'])
