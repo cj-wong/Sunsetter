@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [1.1.1] - 2019-10-09
 ### Changed
 - `conf[shutdown][remove]` now dictates whether shutdown/`switch_off` scripts should be added
+- logger level for whether to add shutdown scripts is now `info` rather than `warning`
 
 ### Fixed
 - `env` issue on auto-scripts

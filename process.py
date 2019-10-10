@@ -107,7 +107,7 @@ if __name__ == '__main__':
         print(message)
         print('More info:')
         print(e)
-        config.LOGGER.warning(message)
-        config.LOGGER.warning(e)
+        config.LOGGER.info(message)
+        config.LOGGER.info(e)
 
     print('Completed Sunsetter.')
