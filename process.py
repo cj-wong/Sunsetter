@@ -36,7 +36,7 @@ def check_sunset() -> Tuple[int, int]:
                 config.LOGGER.info(message)
                 print(message)
                 return (hour, minute)
-    except AttributeError, KeyError, TypeError, ValueError as e:
+    except (AttributeError, KeyError, TypeError, ValueError) as e:
         message = 'Encountered an error. Using failsafe...'
         print(message)
         config.LOGGER.warn(message)
@@ -94,17 +94,14 @@ if __name__ == '__main__':
 
     shutdown = config.CONF['shutdown']
     try:
-        assert shutdown['enabled']
+        assert shutdown['enabled'] and shutdown['remove']
         # Implicit check for KeyError, etc.
         shutdown['hour'] and shutdown['minute'] and config.SCRIPTS['switch_off']
-        # If you do not plan on ever changing shutdown time, you can
-        # comment out this function call after having run at least once.
         crontab.new(
             'switch_off',
             shutdown['hour'],
             shutdown['minute']
             )
-        ###
     except (AssertionError, KeyError, TypeError, ValueError) as e:
         message = 'Shutdown is disabled.'
         print(message)

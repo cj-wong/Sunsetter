@@ -4,8 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.1.1] - 2019-10-09
+### Changed
+- `conf[shutdown][remove]` now dictates whether shutdown/`switch_off` scripts should be added
+
 ### Fixed
 - `env` issue on auto-scripts
+- Exceptions not grouped
 
 ## [1.1] - 2019-10-08
 ### Added
