@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.2] - 2019-10-12
+### Added
+- `crontabber.AutoConfigError` - error when registering auto-scripts
+
+### Fixed
+- Configuration missing errors on auto-scripts
+
 ## [1.1.1] - 2019-10-09
 ### Changed
 - `conf[shutdown][remove]` now dictates whether shutdown/`switch_off` scripts should be added

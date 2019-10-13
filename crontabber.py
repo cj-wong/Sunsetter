@@ -9,6 +9,17 @@ from config import CONF, LOGGER
 PROJECT = 'Sunsetter'
 
 
+class Error(Exception):
+    """Base exception for crontabber"""
+    pass
+
+
+class AutoConfigError(Error):
+    """Error on configuring/registering auto-run jobs"""
+    def __init__(self):
+        super().__init__('Could not register auto-run jobs')
+
+
 class CronTabber:
     """Handles crontab and job management for Sunsetter."""
 
@@ -70,10 +81,10 @@ class CronTabber:
             print('A fatal error has occurred. More info:')
             print(e)
             LOGGER.error(e)
-            raise 
+            raise AutoConfigError
 
         job = self.crontab.new(
-            command=f"{CONF['env']}/bin/python {script}",
+            command=f"cd {CONF['root']} && {CONF['env']}/bin/python {script}",
             comment=f"{PROJECT}-auto-{conf}"
             )
         job.hour.on(CONF[conf]['hour'])
