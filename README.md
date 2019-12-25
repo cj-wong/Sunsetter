@@ -1,4 +1,4 @@
-# Sunsetter (with [*Wolfram|Alpha*][WA])
+# Sunsetter (with *[Wolfram|Alpha][WA]*)
 
 ## Overview
 
@@ -6,7 +6,7 @@ This project aims to automate sunset checking; scripts are intended to be used i
 
 ## Usage
 
-After installing [dependencies](#requirements) and [configuring](#setup) [*Wolfram|Alpha Developers*][WADev] and [`config.yaml`](config.yaml.example), run [`process.py`](process.py).
+After installing [dependencies](#requirements) and [configuring](#setup) *[Wolfram|Alpha Developers][WADEV]* and [`config.yaml`](config.yaml.example), run [`process.py`](process.py).
 
 ## Requirements
 
@@ -14,7 +14,7 @@ This code is designed around the following:
 
 - Python 3
     - `requests`
-        - `GET` with [*Wolfram|Alpha*][WA]
+        - `GET` with *[Wolfram|Alpha][WA]*
     - `bs4` to parse the result from `requests`
     - `lxml` for `bs4` to parse
     - `pyyaml` for managing configuration
@@ -24,7 +24,7 @@ This code is designed around the following:
 
 ## Setup
 
-1. Setup with [*Wolfram|Alpha Developers*][WADev].
+1. Setup with *[Wolfram|Alpha Developers][WADEV]*.
 2. Request an **AppID**.
     - Store this into [`config.yaml`](config.yaml.example) in `appid`.
 3. [Fill](#configuration) in the other fields in the configuration file as desired.
@@ -36,7 +36,7 @@ This code is designed around the following:
     - `root`: where your scripts live
     - `switch_on`: called around sunset, with your `offset`s considered
     - `switch_off`: called at `shutdown` time
-- `failsafe`: failsafe in case the [*Wolfram|Alpha*][WA] APIs can't be reached; treated as sunset
+- `failsafe`: failsafe in case the *[Wolfram|Alpha][WA]* APIs can't be reached; treated as sunset
     - `hour`
     - `minute`
 - `sunset`
@@ -77,7 +77,7 @@ This code is designed around the following:
 - [`config.py`](config.py)
     - manages the configuration for other scripts
 - [`process.py`](process.py)
-    - manages the [*Wolfram|Alpha*][WA] API; can be auto-run
+    - manages the *[Wolfram|Alpha][WA]* API; can be auto-run
 - [`remove.py`](remove.py)
     - removes `switch_on` and/or `switch_off` cron jobs; can be auto-run 
 - [`crontabber.py`](crontabber.py)
@@ -85,7 +85,7 @@ This code is designed around the following:
 
 ## Disclaimer
 
-This project is not affiliated with or endorsed by [*Wolfram|Alpha*][WA]. See [`LICENSE`](LICENSE) for more detail.
+This project is not affiliated with or endorsed by *[Wolfram|Alpha][WA]*. See [`LICENSE`](LICENSE) for more detail.
 
 [WA]: https://www.wolframalpha.com/
-[WADev]: https://developer.wolframalpha.com/portal/myapps/
+[WADEV]: https://developer.wolframalpha.com/portal/myapps/

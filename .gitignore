@@ -9,3 +9,4 @@
 # Project-specific files
 config.yaml
 sunset.log
+sunset.log.[1-5]

@@ -34,15 +34,12 @@ def check_sunset() -> Tuple[int, int]:
                     hour += 12
                 message = f'Sunset will be at {hour:02}:{minute:02}'
                 config.LOGGER.info(message)
-                print(message)
                 return (hour, minute)
     except (AttributeError, KeyError, TypeError, ValueError) as e:
-        message = 'Encountered an error. Using failsafe...'
-        print(message)
-        config.LOGGER.warn(message)
+        config.LOGGER.warn('Encountered an error. Using failsafe...')
         config.LOGGER.warn(e)
         failsafe = config['failsafe']
-        print(
+        config.LOGGER.info(
             f"Sunset emulated at {failsafe['hour']:02}:{failsafe['minute']:02}"
             )
         return (failsafe['hour'], failsafe['minute'])
@@ -62,7 +59,6 @@ def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
     minute = today.minute
     message = f'Scripts will fire at around {hour:02}:{minute:02}'
     config.LOGGER.info(message)
-    print(message)
     return (today.hour, today.minute)
 
 
@@ -70,17 +66,12 @@ if __name__ == '__main__':
     hour, minute = check_sunset()
 
     try:
-        assert (
-            config.SCRIPTS['root']
-            and config.SCRIPTS['switch_on']
-            ), (
-            'Scripts are not configured.'
-            )
-    except (AssertionError, KeyError, TypeError, ValueError) as e:
-        print('A fatal error has occurred. More info:')
-        print(e)
+        # Implicit check for KeyError, etc.
+        config.SCRIPTS['root']
+        config.SCRIPTS['switch_on']
+    except (KeyError, TypeError, ValueError) as e:
         config.LOGGER.error(e)
-        print('Scripts will not run. Exiting...')
+        config.LOGGER.error('Scripts will not run. Exiting...')
         raise config.InvalidConfigError
 
     hour, minute = adjust_time(hour, minute)
@@ -94,20 +85,17 @@ if __name__ == '__main__':
 
     shutdown = config.CONF['shutdown']
     try:
-        assert shutdown['enabled'] and shutdown['remove']
         # Implicit check for KeyError, etc.
-        shutdown['hour'] and shutdown['minute'] and config.SCRIPTS['switch_off']
+        shutdown['enabled']
+        shutdown['remove']
+        config.SCRIPTS['switch_off']
         crontab.new(
             'switch_off',
             shutdown['hour'],
             shutdown['minute']
             )
-    except (AssertionError, KeyError, TypeError, ValueError) as e:
-        message = 'Shutdown is disabled.'
-        print(message)
-        print('More info:')
-        print(e)
-        config.LOGGER.info(message)
+    except (KeyError, TypeError, ValueError) as e:
+        config.LOGGER.info('Shutdown is disabled. More info:')
         config.LOGGER.info(e)
 
-    print('Completed Sunsetter.')
+    config.LOGGER.info('Completed Sunsetter.')

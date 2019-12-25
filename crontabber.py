@@ -37,8 +37,9 @@ class CronTabber:
             minute (int): the minute the job will start
 
         """
+        command = f"cd {CONF['scripts']['root']} && {CONF['scripts'][script]}"
         job = self.crontab.new(
-            command=f"{CONF['scripts']['root']}/{CONF['scripts'][script]}",
+            command=command,
             comment=f"{PROJECT}-{script}",
             )
         job.hour.on(hour)
@@ -55,7 +56,7 @@ class CronTabber:
             int: number of jobs removed
 
         """
-        # Will intentionally cause KeyError, etc. if invalid
+        # Implicit check for KeyError, etc.
         CONF['scripts'][script]
 
         jobs = self.crontab.remove_all(comment=f"{PROJECT}-{script}")
@@ -73,23 +74,20 @@ class CronTabber:
 
         """
         try:
-            assert (CONF['env'] and CONF['root']), 'Configuration not found'
             script = f"{CONF['root']}/{script}"
-            assert Path(script).exists(), 'Script not found'
-            CONF[conf]['hour'] and CONF[conf]['minute']
-        except (AssertionError, KeyError, TypeError, ValueError) as e:
-            print('A fatal error has occurred. More info:')
-            print(e)
+            if not Path(script).exists():
+                raise FileNotFoundError
+            command = f"cd {CONF['root']} && {CONF['env']}/bin/python {script}"
+            job = self.crontab.new(
+                command=command,
+                comment=f"{PROJECT}-auto-{conf}"
+                )
+            job.hour.on(CONF[conf]['hour'])
+            job.minute.on(CONF[conf]['minute'])
+            self.crontab.write()
+        except (FileNotFoundError, KeyError, TypeError, ValueError) as e:
             LOGGER.error(e)
             raise AutoConfigError
-
-        job = self.crontab.new(
-            command=f"cd {CONF['root']} && {CONF['env']}/bin/python {script}",
-            comment=f"{PROJECT}-auto-{conf}"
-            )
-        job.hour.on(CONF[conf]['hour'])
-        job.minute.on(CONF[conf]['minute'])
-        self.crontab.write()
 
 
 if __name__ == '__main__':

@@ -6,20 +6,29 @@ import yaml
 MAX_H = 24
 MAX_M = 60
 
-LOGGER = logging.getLogger('sunset_log')
+LOGGER = logging.getLogger('sunset')
 LOGGER.setLevel(logging.DEBUG)
 
-FH = logging.FileHandler('sunset.log')
+FH = logging.handlers.RotatingFileHandler(
+    'sunset.log',
+    maxBytes=4096,
+    backupCount=5,
+    )
 FH.setLevel(logging.DEBUG)
 
 CH = logging.StreamHandler()
-CH.setLevel(logging.WARNING)
+CH.setLevel(logging.INFO)
 
-FORMATTER = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+FH.setFormatter(
+    logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
     )
-FH.setFormatter(FORMATTER)
-CH.setFormatter(FORMATTER)
+CH.setFormatter(
+    logging.Formatter(
+        '%(levelname)s - %(message)s'
+        )
+    )
 
 LOGGER.addHandler(FH)
 LOGGER.addHandler(CH)
@@ -33,29 +42,25 @@ try:
         OFFSET_M = OFFSET['minutes']
         SHUTDOWN = CONF['shutdown']
         SCRIPTS = CONF['scripts']
-        assert OFFSET_H in range(-MAX_H + 1, MAX_H), (
-            'not within 24 hours'
-            )
-        assert OFFSET_M in range(-MAX_M + 1, MAX_M), (
-            'exceeded 60 minutes (use hours)'
-            )
+        if OFFSET_H not in range(-MAX_H + 1, MAX_H):
+            raise TimeError('OFFSET_H is not within 24 hours')
+        if OFFSET_M not in range(-MAX_M + 1, MAX_M):
+            raise TimeError('OFFSET_M exceeds 60 minutes (use hours)')
 except FileNotFoundError:
-    ERR = 'config.yaml was not found. Create it from config.yaml.example.'
-    print(ERR)
-    LOGGER.error(ERR)
-    print('Exiting...')
+    LOGGER.error(
+        'config.yaml was not found. Create it from config.yaml.example.'
+        )
+    LOGGER.warn('Exiting...')
     raise InvalidConfigError
 except (KeyError, TypeError, ValueError) as e:
-    print('config.yaml is malformed. More information:')
-    print(e)
+    LOGGER.error('config.yaml is malformed. More information:')
     LOGGER.error(e)
-    print('Exiting...')
+    LOGGER.warn('Exiting...')
     raise InvalidConfigError
-except AssertionError as e:
-    print('Offset values are invalid. More information:')
-    print(e)
+except TimeError as e:
+    LOGGER.error('Offset values are invalid. More information:')
     LOGGER.error(e)
-    print('Exiting...')
+    LOGGER.warn('Exiting...')
     raise InvalidConfigError
 
 
@@ -66,5 +71,12 @@ class Error(Exception):
 
 class InvalidConfigError(Error):
     """An invalid configuration was detected."""
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('An invalid configuration was detected.')
+
+
+class TimeError(Error):
+    """Offsets are not valid times."""
+    def __init__(self, message: str) -> None:
+        """Initialize the time error with a message."""
+        super().__init__(message)

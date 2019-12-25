@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.3] - 2019-12-25
+### Changed
+- Use `RotatingFileHandler` for logs
+- Minor code polish
+- On/off scripts are now called by `cd`ing into the scripts' root and executing from there
+- Replaced all `assert`s and `AssertionError`s with more Pythonic checks
+- `StreamLogger` set to `INFO`
+- Removed and/or replaced duplicating `print`s with logging
+
 ## [1.1.2] - 2019-10-12
 ### Added
 - `crontabber.AutoConfigError` - error when registering auto-scripts
