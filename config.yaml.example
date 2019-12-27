@@ -41,6 +41,7 @@ shutdown:
   hour: 0
   minute: 0
 # The following configurations are meant for automated job deletion.
-# Absolute paths for both env and root
+# Paths for both env and root. Relative path can be used for `env` provided
+# the environment is within `root`.
 env: ''
 root: ''

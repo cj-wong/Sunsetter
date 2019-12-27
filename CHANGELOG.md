@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.4] - 2019-12-26
+### Fixed
+- Issue with [`remove.py`](remove.py) treating `switch_on` jobs as `switch_off` to remove
+
+### Changed
+- Minor code changes: relative paths are accepted for `env` in [`config.yaml`](config.yaml.example) provided that `env` is within `root`
+
 ## [1.1.3] - 2019-12-25
 ### Changed
 - Use `RotatingFileHandler` for logs

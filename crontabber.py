@@ -74,8 +74,7 @@ class CronTabber:
 
         """
         try:
-            script = f"{CONF['root']}/{script}"
-            if not Path(script).exists():
+            if not Path(f"{CONF['root']}/{script}").exists():
                 raise FileNotFoundError
             command = f"cd {CONF['root']} && {CONF['env']}/bin/python {script}"
             job = self.crontab.new(

@@ -15,9 +15,9 @@ def remove_switch(mode: str) -> None:
     if mode not in ['on', 'off']:
         LOGGER.error(f'Invalid mode: {mode}')
 
-    mode = f'switch_{mode}'
-
     trigger = 'sunset' if mode == 'on' else 'shutdown'
+
+    mode = f'switch_{mode}'
 
     if not CONF[trigger]['remove']:
         message = f'{mode} jobs will not be removed.'
