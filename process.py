@@ -38,7 +38,7 @@ def check_sunset() -> Tuple[int, int]:
     except (AttributeError, KeyError, TypeError, ValueError) as e:
         config.LOGGER.warn('Encountered an error. Using failsafe...')
         config.LOGGER.warn(e)
-        failsafe = config['failsafe']
+        failsafe = config.CONF['failsafe']
         config.LOGGER.info(
             f"Sunset emulated at {failsafe['hour']:02}:{failsafe['minute']:02}"
             )
