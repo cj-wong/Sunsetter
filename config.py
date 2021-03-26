@@ -4,35 +4,48 @@ import logging.handlers
 import yaml
 
 
-MAX_H = 24
-MAX_M = 60
+class InvalidConfigError(ValueError):
+    """An invalid configuration was detected."""
 
-LOGGER = logging.getLogger('sunset')
+    def __init__(self) -> None:
+        """Initialize the error message for invalid configuration."""
+        super().__init__('An invalid configuration was detected.')
+
+
+class TimeError(ValueError):
+    """Offsets are not valid times."""
+
+    def __init__(self, message: str) -> None:
+        """Initialize the time error with a message."""
+        super().__init__(message)
+
+
+_LOGGER_NAME = 'Sunsetter'
+
+LOGGER = logging.getLogger(_LOGGER_NAME)
 LOGGER.setLevel(logging.DEBUG)
 
-FH = logging.handlers.RotatingFileHandler(
-    'sunset.log',
-    maxBytes=4096,
+_FH = logging.handlers.RotatingFileHandler(
+    f'{_LOGGER_NAME}.log',
+    maxBytes=40960,
     backupCount=5,
     )
-FH.setLevel(logging.DEBUG)
+_FH.setLevel(logging.DEBUG)
 
-CH = logging.StreamHandler()
-CH.setLevel(logging.INFO)
+_CH = logging.StreamHandler()
+_CH.setLevel(logging.WARNING)
 
-FH.setFormatter(
-    logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
+_FORMATTER = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-CH.setFormatter(
-    logging.Formatter(
-        '%(levelname)s - %(message)s'
-        )
-    )
+_FH.setFormatter(_FORMATTER)
+_CH.setFormatter(_FORMATTER)
 
-LOGGER.addHandler(FH)
-LOGGER.addHandler(CH)
+LOGGER.addHandler(_FH)
+LOGGER.addHandler(_CH)
+
+_MAX_H = 24
+_MAX_M = 60
 
 try:
     with open('config.yaml', 'r') as f:
@@ -43,14 +56,13 @@ try:
         OFFSET_M = OFFSET['minutes']
         SHUTDOWN = CONF['shutdown']
         SCRIPTS = CONF['scripts']
-        if OFFSET_H not in range(-MAX_H + 1, MAX_H):
+        if OFFSET_H not in range(-_MAX_H + 1, _MAX_H):
             raise TimeError('OFFSET_H is not within 24 hours')
-        if OFFSET_M not in range(-MAX_M + 1, MAX_M):
+        if OFFSET_M not in range(-_MAX_M + 1, _MAX_M):
             raise TimeError('OFFSET_M exceeds 60 minutes (use hours)')
 except FileNotFoundError:
     LOGGER.error(
-        'config.yaml was not found. Create it from config.yaml.example.'
-        )
+        'config.yaml was not found. Create it from config.yaml.example.')
     LOGGER.warn('Exiting...')
     raise InvalidConfigError
 except (KeyError, TypeError, ValueError) as e:
@@ -63,21 +75,3 @@ except TimeError as e:
     LOGGER.error(e)
     LOGGER.warn('Exiting...')
     raise InvalidConfigError
-
-
-class Error(Exception):
-    """Base exception for Sunsetter"""
-    pass
-
-
-class InvalidConfigError(Error):
-    """An invalid configuration was detected."""
-    def __init__(self) -> None:
-        super().__init__('An invalid configuration was detected.')
-
-
-class TimeError(Error):
-    """Offsets are not valid times."""
-    def __init__(self, message: str) -> None:
-        """Initialize the time error with a message."""
-        super().__init__(message)
