@@ -11,9 +11,14 @@ def remove_switch(mode: str) -> None:
     Args:
         mode (str): either 'on' or 'off'
 
+    Raises:
+        ValueError: mode is not 'on' or 'off'
+
     """
     if mode not in ['on', 'off']:
-        LOGGER.error(f'Invalid mode: {mode}')
+        message = f'Invalid mode: {mode}'
+        LOGGER.error(message)
+        raise ValueError(message)
 
     trigger = 'sunset' if mode == 'on' else 'shutdown'
 
