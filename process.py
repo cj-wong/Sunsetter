@@ -12,10 +12,10 @@ URL = 'https://api.wolframalpha.com/v2/query'
 
 
 def check_sunset() -> Tuple[int, int]:
-    """Checks sunset time using the Wolfram|Alpha API.
+    """Check sunset time using the Wolfram|Alpha API.
 
     Returns:
-        tuple(int, int): (hour, minute) of the sunset
+        Tuple[int, int]: (hour, minute) of the sunset
 
     """
     try:
@@ -46,10 +46,10 @@ def check_sunset() -> Tuple[int, int]:
 
 
 def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
-    """Adjusts time from sunset using offset in config.
+    """Adjust time from sunset using offset in config.
 
     Returns:
-        tuple(int, int): (hour, minute) of the adjusted time
+        Tuple[int, int]: (hour, minute) of the adjusted time
 
     """
     today = pendulum.today()

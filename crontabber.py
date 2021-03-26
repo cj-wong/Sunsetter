@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Dict
 
 from crontab import CronTab
 
@@ -9,14 +8,11 @@ from config import CONF, LOGGER
 PROJECT = 'Sunsetter'
 
 
-class Error(Exception):
-    """Base exception for crontabber"""
-    pass
+class AutoConfigError(RuntimeError):
+    """Error on configuring/registering auto-run jobs."""
 
-
-class AutoConfigError(Error):
-    """Error on configuring/registering auto-run jobs"""
     def __init__(self):
+        """Initialize the error with a message."""
         super().__init__('Could not register auto-run jobs')
 
 
@@ -24,15 +20,15 @@ class CronTabber:
     """Handles crontab and job management for Sunsetter."""
 
     def __init__(self):
-        """Initialize CronTabber."""
+        """Initialize CronTabber with current user's crontab."""
         self.crontab = CronTab(user=True)
 
     def new(self, script: str, hour: int, minute: int) -> None:
-        """Registers a new job with the `script` to call
-        at `hour` and `minute`.
+        """Register the script called at `hour:minute` as a new cron job.
 
         Args:
-            script (str): the script to call in this job; the key of CONF['scripts']
+            script (str): the script to call in this job; must be a child key
+                of CONF['scripts']
             hour (int): the hour the job will start
             minute (int): the minute the job will start
 
@@ -47,10 +43,11 @@ class CronTabber:
         self.crontab.write()
 
     def remove_script_jobs(self, script: str) -> int:
-        """Removes all jobs that run `script` from cron.
+        """Remove all jobs that run `script` from cron.
 
         Args:
-            script (str): the script to call in this job; the key of CONF['scripts']
+            script (str): the script to call in this job; must be a child key
+                of CONF['scripts']
 
         Returns:
             int: number of jobs removed
@@ -64,8 +61,9 @@ class CronTabber:
         return jobs
 
     def register_auto(self, script: str, conf: str) -> None:
-        """Registers an auto-remove script. This should only be
-        called once, unless the cron job was deleted.
+        """Register an auto-remove script.
+
+        This should only be called once, unless the cron job was deleted.
 
         Args:
             script (str): the script to register for auto-runs

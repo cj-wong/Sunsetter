@@ -28,7 +28,7 @@ def remove_switch(mode: str) -> None:
 
 
 def main() -> None:
-    """Main function for the remove module"""
+    """Run crontab removal."""
     LOGGER.info('Beginning cron job removal...')
     for mode in ['on', 'off']:
         remove_switch(mode)
