@@ -5,7 +5,7 @@ from crontab import CronTab
 from config import CONF, LOGGER
 
 
-PROJECT = 'Sunsetter'
+CRON_PREFIX = 'Sunsetter'
 
 
 class AutoConfigError(RuntimeError):
@@ -36,7 +36,7 @@ class CronTabber:
         command = f"cd {CONF['scripts']['root']} && {CONF['scripts'][script]}"
         job = self.crontab.new(
             command=command,
-            comment=f"{PROJECT}-{script}",
+            comment=f"{CRON_PREFIX}-{script}",
             )
         job.hour.on(hour)
         job.minute.on(minute)
@@ -56,7 +56,7 @@ class CronTabber:
         # Implicit check for KeyError, etc.
         CONF['scripts'][script]
 
-        jobs = self.crontab.remove_all(comment=f"{PROJECT}-{script}")
+        jobs = self.crontab.remove_all(comment=f"{CRON_PREFIX}-{script}")
         self.crontab.write()
         return jobs
 
@@ -77,7 +77,7 @@ class CronTabber:
             command = f"cd {CONF['root']} && {CONF['env']}/bin/python {script}"
             job = self.crontab.new(
                 command=command,
-                comment=f"{PROJECT}-auto-{conf}"
+                comment=f"{CRON_PREFIX}-auto-{conf}"
                 )
             job.hour.on(CONF[conf]['hour'])
             job.minute.on(CONF[conf]['minute'])
