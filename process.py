@@ -17,6 +17,10 @@ def check_sunset() -> Tuple[int, int]:
     Returns:
         Tuple[int, int]: (hour, minute) of the sunset
 
+    Raises:
+        KeyError: if local sunset could not be determined from Wolfram|Alpha
+            and failsafe was not configured
+
     """
     try:
         page = requests.get(
@@ -35,14 +39,22 @@ def check_sunset() -> Tuple[int, int]:
                 message = f'Sunset will be at {hour:02}:{minute:02}'
                 config.LOGGER.info(message)
                 return (hour, minute)
+        else:
+            raise ValueError(
+                'Could not determine local sunset from Wolfram|Alpha.')
     except (AttributeError, KeyError, TypeError, ValueError) as e:
         config.LOGGER.warn('Encountered an error. Using failsafe...')
         config.LOGGER.warn(e)
-        failsafe = config.CONF['failsafe']
-        config.LOGGER.info(
-            f"Sunset emulated at {failsafe['hour']:02}:{failsafe['minute']:02}"
-            )
-        return (failsafe['hour'], failsafe['minute'])
+        try:
+            failsafe = config.CONF['failsafe']
+            failsafe_time = f"{failsafe['hour']:02}:{failsafe['minute']:02}"
+            config.LOGGER.info(
+                f"Sunset emulated at {failsafe_time}."
+                )
+            return (failsafe['hour'], failsafe['minute'])
+        except KeyError as e:
+            config.LOGGER.error('Failsafe was not configured. Exiting...')
+            raise e
 
 
 def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
@@ -52,8 +64,7 @@ def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
         Tuple[int, int]: (hour, minute) of the adjusted time
 
     """
-    today = pendulum.today()
-    today = today.add(hours=hour, minutes=minute)
+    today = pendulum.today().at(hour, minute)
     today = today.add(hours=config.OFFSET_H, minutes=config.OFFSET_M)
     hour = today.hour
     minute = today.minute
