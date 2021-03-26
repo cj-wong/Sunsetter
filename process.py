@@ -68,7 +68,7 @@ def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
     today = today.add(hours=config.OFFSET_H, minutes=config.OFFSET_M)
     hour = today.hour
     minute = today.minute
-    message = f'Scripts will fire at around {hour:02}:{minute:02}'
+    message = f'Scripts will run at around {hour:02}:{minute:02}'
     config.LOGGER.info(message)
     return (today.hour, today.minute)
 
@@ -88,11 +88,7 @@ if __name__ == '__main__':
     hour, minute = adjust_time(hour, minute)
     crontab = CronTabber()
 
-    crontab.new(
-        'switch_on',
-        hour,
-        minute
-        )
+    crontab.new('switch_on', hour, minute)
 
     shutdown = config.CONF['shutdown']
     try:
@@ -100,11 +96,7 @@ if __name__ == '__main__':
         shutdown['enabled']
         shutdown['remove']
         config.SCRIPTS['switch_off']
-        crontab.new(
-            'switch_off',
-            shutdown['hour'],
-            shutdown['minute']
-            )
+        crontab.new('switch_off', shutdown['hour'], shutdown['minute'])
     except (KeyError, TypeError, ValueError) as e:
         config.LOGGER.info('Shutdown is disabled. More info:')
         config.LOGGER.info(e)
