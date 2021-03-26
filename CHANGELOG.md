@@ -3,12 +3,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.5] - 2021-03-26
+### Changed
+- Rewrote parts of the readme to improve clarity.
+- The code has been linted with `Flake8` and `mypy`.
+- Any instance of `class Error(Exception)` was removed and replaced in favor of other exceptions. (e.g. `ValueError`) In other words, any subclassed `Error`s now subclass a different exception.
+- In [config.py]:
+    - Synced changes from my skeleton git repo.
+    - Both custom errors `InvalidConfigError` and `TimeError` now subclass `ValueError` rather than `Error`, which was itself a subclass of `Exception`.
+    - `MAX_H` and `MAX_M` were marked private, as `_MAX_H` and `_MAX_M` respectively.
+
+### Fixed
+- In [process.py]: Fixed `failsafe` being mis-assigned; it was incorrectly assigned `config['failsafe']` when it was meant to be `config.CONF['failsafe']`.
+- In [remove.py]: Fixed invalid `mode` in 
+
+### Security
+- Updated `pyyaml` and `lxml` for dependabot alerts.
+
 ## [1.1.4] - 2019-12-26
 ### Fixed
-- Issue with [`remove.py`](remove.py) treating `switch_on` jobs as `switch_off` to remove
+- Fixed issue with [remove.py] treating `switch_on` jobs as `switch_off` to remove
 
 ### Changed
-- Minor code changes: relative paths are accepted for `env` in [`config.yaml`](config.yaml.example) provided that `env` is within `root`
+- Minor code changes: relative paths are accepted for `env` in [config.yaml](config.yaml.example) provided that `env` is within `root`
 
 ## [1.1.3] - 2019-12-25
 ### Changed
@@ -37,15 +54,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.1] - 2019-10-08
 ### Added
-- New [`crontabber.py`](crontabber.py) to manage the `crontab` library
-- New [`remove.py`](remove.py) to auto-remove cron jobs
+- New [crontabber.py] to manage the `crontab` library
+- New [remove.py] to auto-remove cron jobs
 - Can now register cron jobs programmatically; simply call `crontabber.py` as main
-    - Will register both [`process.py`](process.py) and [`remove.py`](remove.py)
+    - Will register both [process.py] and [remove.py]
 - Failsafe implemented in config, if API cannot be reached
 
 ### Changed
-- Configuration is now stored in a separate [file](config.py) to be accessible by all new files
+- Configuration is now stored in [config.py] to be accessible by all new files
 
 ## [1.0] - 2019-10-08
 ### Added
 - Initial version
+
+[config.py]: config.py
+[crontabber.py]: crontabber.py
+[process.py]: process.py
+[remove.py]: remove.py
