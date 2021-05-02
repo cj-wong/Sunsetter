@@ -41,6 +41,7 @@ class CronTabber:
         job.hour.on(hour)
         job.minute.on(minute)
         self.crontab.write()
+        LOGGER.info(f'New cron job for {script} created: {hour}:{minute}')
 
     def remove_script_jobs(self, script: str) -> int:
         """Remove all jobs that run `script` from cron.
