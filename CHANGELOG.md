@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Moved main script contents of [process.py] into new function `main()`.
 
 ### Fixed
-- #1 - Fixed duplicating shutdown cron jobs even when disabled in the configuration.
+- #5 - Fixed duplicating shutdown cron jobs even when disabled in the configuration.
 
 ## [1.1.6] - 2021-04-30
 ### Security
