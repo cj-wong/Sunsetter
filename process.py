@@ -92,13 +92,14 @@ if __name__ == '__main__':
 
     shutdown = config.CONF['shutdown']
     try:
-        # Implicit check for KeyError, etc.
-        shutdown['enabled']
-        shutdown['remove']
-        config.SCRIPTS['switch_off']
-        crontab.new('switch_off', shutdown['hour'], shutdown['minute'])
-    except (KeyError, TypeError, ValueError) as e:
+        if not shutdown['enabled']:
+            raise config.ShutdownDisabled
+        if not (shutdown['remove'] and config.SCRIPTS['switch_off']):
+            raise ValueError
+    except (ValueError, config.ShutdownDisabled) as e:
         config.LOGGER.info('Shutdown is disabled. More info:')
         config.LOGGER.info(e)
-
-    config.LOGGER.info('Completed Sunsetter.')
+    else:
+        crontab.new('switch_off', shutdown['hour'], shutdown['minute'])
+    finally:
+        config.LOGGER.info('Completed Sunsetter.')

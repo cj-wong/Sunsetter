@@ -20,6 +20,14 @@ class TimeError(ValueError):
         super().__init__(message)
 
 
+class ShutdownDisabled(Warning):
+    """Shutdown (switch_off) scripts are disabled in the configuration."""
+
+    def __init__(self) -> None:
+        """Initialize the warning with a message."""
+        super().__init__('switch_off in the configuration is disabled.')
+
+
 _LOGGER_NAME = 'Sunsetter'
 
 LOGGER = logging.getLogger(_LOGGER_NAME)
