@@ -77,13 +77,13 @@ if __name__ == '__main__':
     hour, minute = check_sunset()
 
     try:
-        # Implicit check for KeyError, etc.
-        config.SCRIPTS['root']
-        config.SCRIPTS['switch_on']
+        if not (config.SCRIPTS['root'] and config.SCRIPTS['switch_on']):
+            raise ValueError
     except (KeyError, TypeError, ValueError) as e:
+        config.LOGGER.error('Your configuration is malformed. More info:')
         config.LOGGER.error(e)
-        config.LOGGER.error('Scripts will not run. Exiting...')
-        raise config.InvalidConfigError
+        config.LOGGER.info('Exiting...')
+        raise config.InvalidConfigError from e
 
     hour, minute = adjust_time(hour, minute)
     crontab = CronTabber()
