@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.7] - 2021-05-01
+### Added
+- Added new logger message in [crontabber.py] when creating new cron jobs.
+- Added new exception `config.ShutdownDisabled` for when shutdown scripts are disabled.
+- Added new function `is_shutdown_time_int()` sure that shutdown time hour and minute are both `int`.
+
+### Changed
+- Moved main script contents of [process.py] into new function `main()`.
+
+### Fixed
+- #1 - Fixed duplicating shutdown cron jobs even when disabled in the configuration.
+
 ## [1.1.6] - 2021-04-30
 ### Security
 - Updated `urllib3`.
