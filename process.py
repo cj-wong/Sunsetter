@@ -87,13 +87,14 @@ def is_shutdown_time_int(hour: Any, minute: Any) -> bool:
     return type(hour) is int and type(minute) is int
 
 
-if __name__ == '__main__':
+def main() -> None:
+    """Run the main script."""
     hour, minute = check_sunset()
 
     try:
         if not (config.SCRIPTS['root'] and config.SCRIPTS['switch_on']):
             raise ValueError
-    except (KeyError, TypeError, ValueError) as e:
+    except (KeyError, ValueError) as e:
         config.LOGGER.error('Your configuration is malformed. More info:')
         config.LOGGER.error(e)
         config.LOGGER.info('Exiting...')
@@ -119,3 +120,7 @@ if __name__ == '__main__':
         crontab.new('switch_off', shutdown['hour'], shutdown['minute'])
     finally:
         config.LOGGER.info('Completed Sunsetter.')
+
+
+if __name__ == '__main__':
+    main()
