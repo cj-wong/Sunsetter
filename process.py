@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple
 
 import pendulum
 import requests
@@ -73,6 +73,20 @@ def adjust_time(hour: int, minute: int) -> Tuple[int, int]:
     return (today.hour, today.minute)
 
 
+def is_shutdown_time_int(hour: Any, minute: Any) -> bool:
+    """Check if shutdown time are numbers.
+
+    Args:
+        hour (Any): hour according to user config
+        minute (Any): minute according to user config
+
+    Returns:
+        bool: True if both are numbers
+
+    """
+    return type(hour) is int and type(minute) is int
+
+
 if __name__ == '__main__':
     hour, minute = check_sunset()
 
@@ -95,6 +109,8 @@ if __name__ == '__main__':
         if not shutdown['enabled']:
             raise config.ShutdownDisabled
         if not (shutdown['remove'] and config.SCRIPTS['switch_off']):
+            raise ValueError
+        if not is_shutdown_time_int(shutdown['hour'], shutdown['minute']):
             raise ValueError
     except (ValueError, config.ShutdownDisabled) as e:
         config.LOGGER.info('Shutdown is disabled. More info:')
