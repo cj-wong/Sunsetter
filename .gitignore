@@ -10,3 +10,5 @@
 config.yaml
 sunset.log
 sunset.log.[1-5]
+Sunsetter.log
+Sunsetter.log.[1-5]
